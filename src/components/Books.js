@@ -30,12 +30,17 @@ const Books = () => {
     };
 
     const recommendedBook = () => {
-        setRandNum(Math.floor(Math.random() * 10) + 1);
-        setRandomBook(books[randNum]);
-        setOpenModal(true);
+        if (books === []) {
+            setRandNum(Math.floor(Math.random() * 10) + 1);
+            setRandomBook(books[randNum]);
+            setOpenModal(true);
+        } else {
+            setOpenModal(false);
+            setDisabled(true);
+        }
     };
 
-    if (openModal === true) {
+    if (openModal) {
         return <RecommendedBook randomBook={randomBook} setOpenModal={setOpenModal} openModal={openModal} />;
     }
 
@@ -70,20 +75,22 @@ const Books = () => {
                         stackable 
                         style={{ marginRight: "5px", marginLeft: "5px"}}
                     >
-                        {(books === undefined) ? (
-                            <h1>No books were found!!!</h1>
-                        ) : (books.map((book, i) => (
-                            <BookCard
-                                key={i}
-                                image={book.volumeInfo.imageLinks.thumbnail}
-                                title={book.volumeInfo.title}
-                                authors={book.volumeInfo.authors}
-                                description={book.volumeInfo.description}
-                                pageCount={book.volumeInfo.pageCount}
-                                publisher={book.volumeInfo.publisher}
-                                ratingsCount={book.volumeInfo.ratingsCount}
-                                averageRating={book.volumeInfo.averageRating}
-                            />
+                        {!books ? (
+                                <h1>
+                                    No books were found!!!
+                                </h1>
+                            ) : (books.map((book, i) => (
+                                <BookCard
+                                    key={i}
+                                    image={book.volumeInfo.imageLinks.thumbnail}
+                                    title={book.volumeInfo.title}
+                                    authors={book.volumeInfo.authors}
+                                    description={book.volumeInfo.description}
+                                    pageCount={book.volumeInfo.pageCount}
+                                    publisher={book.volumeInfo.publisher}
+                                    ratingsCount={book.volumeInfo.ratingsCount}
+                                    averageRating={book.volumeInfo.averageRating}
+                                />
                         )))}
                     </Card.Group>
                 </div>
