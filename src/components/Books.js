@@ -70,7 +70,9 @@ const Books = () => {
                         stackable 
                         style={{ marginRight: "5px", marginLeft: "5px"}}
                     >
-                        {books.map((book, i) => (
+                        {(books === undefined) ? (
+                            <h1>No books were found!!!</h1>
+                        ) : (books.map((book, i) => (
                             <BookCard
                                 key={i}
                                 image={book.volumeInfo.imageLinks.thumbnail}
@@ -82,7 +84,7 @@ const Books = () => {
                                 ratingsCount={book.volumeInfo.ratingsCount}
                                 averageRating={book.volumeInfo.averageRating}
                             />
-                        ))}
+                        )))}
                     </Card.Group>
                 </div>
             </Container>
