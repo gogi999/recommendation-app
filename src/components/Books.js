@@ -22,7 +22,7 @@ const Books = () => {
     const handleSearch = async (bookTitle) => {
         const res = await googleBooksApi.get("/search", {
             params: {
-                q: bookTitle
+                q: bookTitle.toLowerCase()
             }
         });
         setBooks(res.data.items);
@@ -30,10 +30,11 @@ const Books = () => {
     };
 
     const recommendedBook = () => {
-        if (books === []) {
+        if (books) {
             setRandNum(Math.floor(Math.random() * 10) + 1);
             setRandomBook(books[randNum]);
             setOpenModal(true);
+            setDisabled(false);
         } else {
             setOpenModal(false);
             setDisabled(true);
@@ -79,19 +80,37 @@ const Books = () => {
                                 <h1>
                                     No books were found!!!
                                 </h1>
-                            ) : (books.map((book, i) => (
-                                <BookCard
-                                    key={i}
-                                    image={book.volumeInfo.imageLinks.thumbnail}
-                                    title={book.volumeInfo.title}
-                                    authors={book.volumeInfo.authors}
-                                    description={book.volumeInfo.description}
-                                    pageCount={book.volumeInfo.pageCount}
-                                    publisher={book.volumeInfo.publisher}
-                                    ratingsCount={book.volumeInfo.ratingsCount}
-                                    averageRating={book.volumeInfo.averageRating}
-                                />
-                        )))}
+                            ) : (books.map((book, i) => {
+                                try {
+                                    return (
+                                        <BookCard
+                                            key={i}
+                                            image={book.volumeInfo.imageLinks.thumbnail}
+                                            title={book.volumeInfo.title}
+                                            authors={book.volumeInfo.authors}
+                                            description={book.volumeInfo.description}
+                                            pageCount={book.volumeInfo.pageCount}
+                                            publisher={book.volumeInfo.publisher}
+                                            ratingsCount={book.volumeInfo.ratingsCount}
+                                            averageRating={book.volumeInfo.averageRating}
+                                        />
+                                    );
+                                } catch (err) {
+                                    return (
+                                        <BookCard
+                                            key={i}
+                                            image={""}
+                                            title={book.volumeInfo.title}
+                                            authors={book.volumeInfo.authors}
+                                            description={book.volumeInfo.description}
+                                            pageCount={book.volumeInfo.pageCount}
+                                            publisher={book.volumeInfo.publisher}
+                                            ratingsCount={book.volumeInfo.ratingsCount}
+                                            averageRating={book.volumeInfo.averageRating}
+                                        />
+                                    );
+                                }
+                        }))}
                     </Card.Group>
                 </div>
             </Container>
